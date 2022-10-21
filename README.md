@@ -1,5 +1,21 @@
 # Projeto Dundie Rewards
 
+Projeto sendo realizado relacionado ao curso Python Experts LinuxTips, em andamento.
+
+| :placard: Vitrine.Dev |     |
+| -------------  | --- |
+| :sparkles: Nome        | **Projeto Dundie Rewards**
+| :label: Tecnologias | python, shell
+| :rocket: URL         | https://github.com/joseevilasio/dundie-rewards
+| :fire: Desafio     | https://www.linuxtips.io
+
+<!-- Inserir imagem com a #vitrinedev ao final do link -->
+![](https://i.postimg.cc/mZmFgWXV/Dundie-Rewards.png?text=imagem+lindona+do+meu+projeto#vitrinedev)
+
+## Detalhes do projeto
+
+# Projeto Dundie Rewards
+
 Nós fomos contratados pela Dunder Mifflin, grande fabricante de papéis para desenvolver um sistema de recompensas para seus colaboradores.
 
 Michael, o gerente da empresa quer aumentar a motivação dos funcionários oferecendo um sistema de pontos que os funcionários podem acumular de acordo com as suas metas atingidas, bonus oferecidos pelo gerente e os funcionários podem também trocam pontos entre sí.
