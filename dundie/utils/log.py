@@ -15,7 +15,7 @@ def get_logger(logfile="dundie.log"):
     # ch = logging.StreamHandler()  # Console/terminal/stderr
     # ch.setLevel(log_level)
     fh = handlers.RotatingFileHandler(
-        "logfile",
+        logfile,
         maxBytes=300,  # 10**6
         backupCount=10,
     )
