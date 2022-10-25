@@ -19,6 +19,9 @@ watch:
 ipython:
 	@.venv/bin/ipython
 
+lint:
+	@.venv/bin/pflake8
+
 clean:            ## Clean unused files.
 	@find ./ -name '*.pyc' -exec rm -f {} \;
 	@find ./ -name '__pycache__' -exec rm -rf {} \;

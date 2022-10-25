@@ -6,3 +6,7 @@ testpaths = [
     "tests",
     "integration",
 ]
+
+
+[tool.flake8]
+exclude = [".venv", "build"]
