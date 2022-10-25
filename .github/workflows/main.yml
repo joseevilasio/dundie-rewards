@@ -27,8 +27,7 @@ jobs:
           python-version: ${{matrix.python-version}}
       - name: Install Project 
         run: pip install '.[test]'
-      - name: Run tests 
-        run: pytest -vv tests integration
+      - name: Run tests         
         run: pytest -v --junitxml=test-result.xml
       - name: publish junit results
         uses: EnricoMi/publish-unit-test-result-action@v1
