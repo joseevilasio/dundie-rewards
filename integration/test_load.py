@@ -10,9 +10,9 @@ from .constants import PEOPLE_FILE
 def test_load_positive_call_load_command():
     """test command load"""
     out = (
-        check_output(["dundie", "load", PEOPLE_FILE])
+        (check_output(["dundie", "load", PEOPLE_FILE])
         .decode("utf-8")
-        .split("\n")
+        ).split("\n")
     )
     assert len(out) == 2
 

@@ -1,5 +1,7 @@
 import argparse
 
+from dundie.core import load  # noqa
+
 
 def main():
     parser = argparse.ArgumentParser(
