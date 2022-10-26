@@ -1,16 +1,15 @@
-# pyproject.toml
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = "-ra -q -vv"
 testpaths = [
     "tests",
-    "integration",
+    "integration"
 ]
-
 
 [tool.flake8]
 exclude = [".venv", "build"]
 max-line-length = 79
+# extend-ignore = "W293,"
 
 [tool.black]
 line-length = 79
