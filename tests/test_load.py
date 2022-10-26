@@ -1,5 +1,7 @@
 import pytest
+
 from dundie.core import load
+
 from .constants import PEOPLE_FILE
 
 
@@ -13,5 +15,5 @@ def test_load_positive_has_2_people(request):
 @pytest.mark.unit
 @pytest.mark.high
 def test_load_positive_first_name_starts_with_j(request):
-    """Test function load function."""    
-    assert load(PEOPLE_FILE)[0][0] == 'J'
+    """Test function load function."""
+    assert load(PEOPLE_FILE)[0][0] == "J"

@@ -1,5 +1,7 @@
+from subprocess import CalledProcessError, check_output
+
 import pytest
-from subprocess import check_output, CalledProcessError
+
 from .constants import PEOPLE_FILE
 
 
@@ -7,9 +9,9 @@ from .constants import PEOPLE_FILE
 @pytest.mark.medium
 def test_load_positive_call_load_command():
     """test command load"""
-    out = check_output(
-        ["dundie", "load", PEOPLE_FILE]
-    ).decode("utf-8").split("\n")
+    out = (
+        check_output(["dundie", "load", PEOPLE_FILE]).decode("utf-8")
+    ).split("\n")
     assert len(out) == 2
 
 
@@ -19,8 +21,8 @@ def test_load_positive_call_load_command():
 def test_load_negative_call_load_command_with_wrong_params(wrong_command):
     """test command load"""
     with pytest.raises(CalledProcessError) as error:
-        check_output(
-            ["dundie", wrong_command, PEOPLE_FILE]
-        ).decode("utf-8").split("\n")
+        check_output(["dundie", wrong_command, PEOPLE_FILE]).decode(
+            "utf-8"
+        ).split("\n")
 
     assert "status 2" in str(error.getrepr())
