@@ -6,8 +6,7 @@ from dundie.utils.user import generate_simple_password
 @pytest.mark.unit
 @pytest.mark.medium
 @pytest.mark.parametrize(
-    "address",
-    ["jose@gmail.com", "joe@doe.com", "a@b.pt"]
+    "address", ["jose@gmail.com", "joe@doe.com", "a@b.pt"]
 )
 def test_positive_check_valid_email(address):
     """Ensure email is valid."""
@@ -16,10 +15,7 @@ def test_positive_check_valid_email(address):
 
 @pytest.mark.unit
 @pytest.mark.medium
-@pytest.mark.parametrize(
-    "address",
-    ["jose@.com", "@doe.com", "a@b"]
-)
+@pytest.mark.parametrize("address", ["jose@.com", "@doe.com", "a@b"])
 def test_negative_check_valid_email(address):
     """Ensure email is invalid."""
     assert check_valid_email(address) is False
