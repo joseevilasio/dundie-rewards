@@ -3,7 +3,7 @@
 
 Projeto sendo realizado relacionado ao curso Python Experts LinuxTips, em andamento.
 
-| :placard: Vitrine.Dev |     |
+| :placard: Vitrine.Dev |   https://cursos.alura.com.br/vitrinedev/joseevilasio/project/dundie-rewards/209234  |
 | -------------  | --- |
 | :sparkles: Nome        | **Projeto Dundie Rewards**
 | :label: Tecnologias | python, shell
