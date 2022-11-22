@@ -10,11 +10,11 @@ virtualenv:
 	@.venv/bin/python -m pip -m venv .venv
 
 test:
-	@.venv/bin/pytest --v -s
+	@.venv/bin/pytest -s --forked
 
 watch:
 	# @.venv/bin/ptw
-	@ls **/*.py | entr pytest
+	@ls **/*.py | entr pytest --forked
 
 ipython:
 	@.venv/bin/ipython
