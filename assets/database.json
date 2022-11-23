@@ -1,0 +1,42 @@
+{
+    "people": {
+        "jim@dundlermifflin.com": {
+            "name": "Jim Halpert",
+            "dept": "Sales",
+            "role": "Salesman"
+        },
+        "schrute@dundlermifflin.com": {
+            "name": "Dwight Schrute",
+            "dept": "Sales",
+            "role": "Manager"
+        }
+    },
+    "balance": {
+        "jim@dundlermifflin.com": 500,
+        "schrute@dundlermifflin.com": 100
+    },
+    "movement": {
+        "jim@dundlermifflin.com": [
+            {
+                "date": "2022-11-23T10:15:28.263368",
+                "actor": "system",
+                "value": 500
+            }
+        ],
+        "schrute@dundlermifflin.com": [
+            {
+                "date": "2022-11-23T10:15:32.444289",
+                "actor": "system",
+                "value": 100
+            }
+        ]
+    },
+    "users": {
+        "jim@dundlermifflin.com": {
+            "password": "1MLURdki"
+        },
+        "schrute@dundlermifflin.com": {
+            "password": "SpdyP3w2"
+        }
+    }
+}

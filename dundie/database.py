@@ -5,7 +5,7 @@ from dundie.utils.email import send_email, check_valid_email
 from dundie.utils.user import generate_simple_password
 
 
-EMPTY_DB = {"people": {}, "balence": {}, "movement": {}, "users": {}}
+EMPTY_DB = {"people": {}, "balance": {}, "movement": {}, "users": {}}
 
 
 def connect():
