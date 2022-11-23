@@ -51,7 +51,6 @@ def test_add_or_remove_points_for_person():
     _, created = add_person(db, pk, data)
     assert created is True
     commit(db)
-    
     db = connect()
     before = db["balance"][pk]
     add_movement(db, pk, -100, "manager")
