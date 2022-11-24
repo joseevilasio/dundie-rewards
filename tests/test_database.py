@@ -43,7 +43,6 @@ def test_negative_add_person_invalid_email():
 
 
 @pytest.mark.unit
-@pytest.mark.low
 def test_add_or_remove_points_for_person():
     pk = "joe@doe.com"
     data = {"name": "Joe Doe", "role": "Salesman", "dept": "Sales"}
