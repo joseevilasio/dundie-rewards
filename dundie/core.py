@@ -56,7 +56,7 @@ def read(**query):
                 "email": pk,
                 "balance": db["balance"][pk],
                 "last_movement": db["movement"][pk][-1]["date"],
-                **data
+                **data,
             }
         )
     return return_data
