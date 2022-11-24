@@ -27,6 +27,16 @@
                 "date": "2022-11-23T11:03:49.775567",
                 "actor": "system",
                 "value": 500
+            },
+            {
+                "date": "2022-11-24T09:32:58.095276",
+                "actor": null,
+                "value": 100
+            },
+            {
+                "date": "2022-11-24T09:40:48.205600",
+                "actor": null,
+                "value": -100
             }
         ],
         "schrute@dundlermifflin.com": [
@@ -34,6 +44,16 @@
                 "date": "2022-11-23T11:03:53.879003",
                 "actor": "system",
                 "value": 100
+            },
+            {
+                "date": "2022-11-24T09:32:58.095276",
+                "actor": null,
+                "value": 100
+            },
+            {
+                "date": "2022-11-24T09:40:48.205600",
+                "actor": null,
+                "value": -100
             }
         ],
         "glewis@dundlermifflin.com": [
