@@ -41,3 +41,12 @@ pip install -e `.[dev]`
 ```py
 dundie load assets/people.csv
 ```
+```py
+dundie show
+```
+```py
+dundie add
+```
+```py
+dundie remove
+```
