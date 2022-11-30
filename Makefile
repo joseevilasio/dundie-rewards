@@ -1,10 +1,9 @@
 # Makefile
-.PHONY: install virtualenv ipython clean test watch
-
+.PHONY: install virtualenv ipython clean test pflake8 fmt lint watch docs docs-serve build
 
 install:
 	@echo "Installing for dev environment"
-	@.venv/bin/python -m pip install -e '.[dev]'
+	@.venv/bin/python -m pip install -e '.[test,dev]'
 
 virtualenv:
 	@.venv/bin/python -m pip -m venv .venv
@@ -40,3 +39,18 @@ clean:            ## Clean unused files.
 	@rm -rf htmlcov
 	@rm -rf .tox/
 	@rm -rf docs/_build
+
+docs:
+	@mkdocs build --clean
+
+docs-serve:
+	@mkdocs serve
+
+build:
+	@python setup.py sdist bdist_wheel
+
+publish-test:
+	@twine upload --repository testpypi dist/*
+
+publish:
+	@twine upload dist/*
