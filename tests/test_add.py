@@ -1,29 +1,42 @@
 import pytest
 
-from dundie.database import connect, commit, add_person
 from dundie.core import add
+from dundie.database import get_session
+from dundie.models import Person
+from dundie.utils.db import add_person
 
 
 @pytest.mark.unit
-@pytest.mark.low
 def test_add_movement():
-    db = connect()
 
-    pk = "joe@doe.com"
-    data = {"role": "Salesman", "dept": "Sales", "name": "Joe Doe"}
-    _, created = add_person(db, pk, data)
-    assert created is True
+    with get_session() as session:
 
-    pk = "jim@doe.com"
-    data = {"role": "Manager", "dept": "Management", "name": "Jim Doe"}
-    _, created = add_person(db, pk, data)
-    assert created is True
+        joe = {
+            "email": "joe@doe.com",
+            "name": "Joe Doe",
+            "dept": "Sales",
+            "role": "Salesman",
+        }
 
-    commit(db)
+        instance_joe = Person(**joe)
+        _, created = add_person(session=session, instance=instance_joe)
+        assert created is True
 
-    add(-30, email="joe@doe.com")
-    add(90, dept="Management")
+        jim = {
+            "email": "jim@doe.com",
+            "name": "Jim Doe",
+            "dept": "Management",
+            "role": "Manager",
+        }
 
-    db = connect()
-    assert db["balance"]["joe@doe.com"] == 470
-    assert db["balance"]["jim@doe.com"] == 190
+        instance_jim = Person(**jim)
+        _, created = add_person(session=session, instance=instance_jim)
+        assert created is True
+
+        session.commit()
+
+        add(-30, email="joe@doe.com")
+        add(90, dept="Management")
+
+        assert instance_joe.balance[0].value == 470
+        assert instance_jim.balance[0].value == 190

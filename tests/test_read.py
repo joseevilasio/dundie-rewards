@@ -1,32 +1,46 @@
 import pytest
 
-from dundie.database import connect, commit, add_person
 from dundie.core import read
+from dundie.database import get_session
+from dundie.models import Person
+from dundie.utils.db import add_person
 
 
 @pytest.mark.unit
 def test_read_with_query():
-    db = connect()
+    with get_session() as session:
 
-    pk = "joe@doe.com"
-    data = {"role": "Salesman", "dept": "Sales", "name": "Joe Doe"}
-    _, created = add_person(db, pk, data)
-    assert created is True
+        joe = {
+            "email": "joe@doe.com",
+            "name": "Joe Doe",
+            "dept": "Sales",
+            "role": "Salesman",
+        }
 
-    pk = "jim@doe.com"
-    data = {"role": "Manager", "dept": "Management", "name": "Jim Doe"}
-    _, created = add_person(db, pk, data)
-    assert created is True
+        instance_joe = Person(**joe)
+        _, created = add_person(session=session, instance=instance_joe)
+        assert created is True
 
-    commit(db)
+        jim = {
+            "email": "jim@doe.com",
+            "name": "Jim Doe",
+            "dept": "Management",
+            "role": "Manager",
+        }
 
-    response = read()
-    assert len(response) == 2
+        instance_jim = Person(**jim)
+        _, created = add_person(session=session, instance=instance_jim)
+        assert created is True
 
-    response = read(dept="Management")
-    assert len(response) == 1
-    assert response[0]["name"] == "Jim Doe"
+        session.commit()
 
-    response = read(email="joe@doe.com")
-    assert len(response) == 1
-    assert response[0]["name"] == "Joe Doe"
+        response = read()
+        assert len(response) == 2
+
+        response = read(dept="Management")
+        assert len(response) == 1
+        assert response[0]["name"] == "Jim Doe"
+
+        response = read(email="joe@doe.com")
+        assert len(response) == 1
+        assert response[0]["name"] == "Joe Doe"
