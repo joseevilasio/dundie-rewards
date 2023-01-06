@@ -29,7 +29,7 @@ def load(filepath: str) -> ResultDict:
         raise e
 
     people = []
-    headers = ["name", "dept", "role", "email"]
+    headers = ["name", "dept", "role", "email", "currency"]
 
     with get_session() as session:
         for line in csv_data:
