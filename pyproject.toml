@@ -7,7 +7,7 @@ testpaths = [
 ]
 
 [tool.flake8]
-exclude = [".venv", "build"]
+exclude = [".venv", "build", ".vscodelocal", "migrations"]
 max-line-length = 79
 # extend-ignore = "W293,"
 
