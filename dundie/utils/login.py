@@ -18,13 +18,13 @@ def validation_user_if_exist(user: str) -> bool:
     with get_session() as session:
 
         instance = session.exec(
-            select(Person).where(Person.email == user)
-        ).first()
+            select(Person.email).where(Person.email == user)
+        ).first()        
 
         if instance:
             return True
         if not instance:
-            raise InvalidEmailError(f"User not exist: {user!r}")
+            raise InvalidEmailError(f"User not found: {user!r}")
 
 
 def validation_password(user: str, password: str) -> bool:
@@ -36,7 +36,7 @@ def validation_password(user: str, password: str) -> bool:
             select(Person).where(
                 Person.user.password == password and Person.email == user
             )
-        ).first()
+        ).first()        
 
         if instance:
             return True
