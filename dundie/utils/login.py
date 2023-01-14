@@ -1,7 +1,7 @@
 from sqlmodel import select
 
 from dundie.database import get_session
-from dundie.models import InvalidEmailError, Person, User
+from dundie.models import InvalidEmailError, Person
 from dundie.utils.email import check_valid_email
 
 
