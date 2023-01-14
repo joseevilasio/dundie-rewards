@@ -1,13 +1,15 @@
 from sqlmodel import select
 
 from dundie.database import get_session
-from dundie.models import InvalidEmailError, Person
+from dundie.models import InvalidEmailError, Person, User
 from dundie.utils.email import check_valid_email
 
 
 class InvalidPasswordError(Exception):
     ...
 
+class UserNotFoundError(Exception):
+    ...
 
 def validation_user_if_exist(user: str) -> bool:
     """Validation User if exist in database"""
@@ -19,12 +21,12 @@ def validation_user_if_exist(user: str) -> bool:
 
         instance = session.exec(
             select(Person.email).where(Person.email == user)
-        ).first()        
+        ).first()            
 
         if instance:
             return True
         if not instance:
-            raise InvalidEmailError(f"User not found: {user!r}")
+            raise UserNotFoundError(f"User not found: {user!r}")
 
 
 def validation_password(user: str, password: str) -> bool:
@@ -33,12 +35,10 @@ def validation_password(user: str, password: str) -> bool:
     with get_session() as session:
 
         instance = session.exec(
-            select(Person).where(
-                Person.user.password == password and Person.email == user
-            )
-        ).first()        
+            select(User.password).where(Person.email == user)
+        ).first()              
 
-        if instance:
+        if instance == password:
             return True
-        if not instance:
+        else:
             raise InvalidPasswordError(f"Invalid password for {user!r}")
