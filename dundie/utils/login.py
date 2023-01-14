@@ -8,8 +8,10 @@ from dundie.utils.email import check_valid_email
 class InvalidPasswordError(Exception):
     ...
 
+
 class UserNotFoundError(Exception):
     ...
+
 
 def validation_user_if_exist(user: str) -> bool:
     """Validation User if exist in database"""
@@ -21,7 +23,7 @@ def validation_user_if_exist(user: str) -> bool:
 
         instance = session.exec(
             select(Person.email).where(Person.email == user)
-        ).first()            
+        ).first()
 
         if instance:
             return True
@@ -36,7 +38,7 @@ def validation_password(user: str, password: str) -> bool:
 
         instance = session.exec(
             select(User.password).where(Person.email == user)
-        ).first()              
+        ).first()
 
         if instance == password:
             return True

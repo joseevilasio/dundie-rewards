@@ -5,7 +5,12 @@ from dundie.database import get_session
 from dundie.models import Person, User
 from dundie.utils.db import add_person
 from dundie.utils.email import check_valid_email
-from dundie.utils.login import validation_user_if_exist, validation_password, UserNotFoundError, InvalidPasswordError
+from dundie.utils.login import (
+    InvalidPasswordError,
+    UserNotFoundError,
+    validation_password,
+    validation_user_if_exist,
+)
 from dundie.utils.user import generate_simple_password
 
 
@@ -109,11 +114,9 @@ def test_negative_validation_user_if_exist(user):
 
 @pytest.mark.unit
 @pytest.mark.parametrize(
-    ["user",
-    "password"], 
-    [("joe@doe.com", "12345678"),
-    ("jim@doe.com", "abcdefgh")]
-    )
+    ["user", "password"],
+    [("joe@doe.com", "12345678"), ("jim@doe.com", "abcdefgh")],
+)
 def test_negative_validation_password(user, password):
     """Ensure password is valid"""
     with pytest.raises(InvalidPasswordError):
@@ -149,7 +152,7 @@ def test_negative_validation_password(user, password):
 @pytest.mark.unit
 @pytest.mark.parametrize(["user", "password_"], [("joe@doe.com", "qWert123")])
 def test_positive_validation_password(user, password_):
-    """Ensure password is valid"""    
+    """Ensure password is valid"""
     with get_session() as session:
 
         joe = {
@@ -162,12 +165,14 @@ def test_positive_validation_password(user, password_):
         instance_joe = Person(**joe)
         _, created = add_person(session=session, instance=instance_joe)
 
-        assert created is True        
+        assert created is True
 
-        joe_update = session.exec(select(User).where(User.person == instance_joe)).one()
+        joe_update = session.exec(
+            select(User).where(User.person == instance_joe)
+        ).one()
         joe_update.password = "qWert123"
         session.add(joe_update)
         session.commit()
-        session.refresh(joe_update)              
+        session.refresh(joe_update)
 
         assert validation_password(user, password_) is True
