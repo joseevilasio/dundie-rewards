@@ -1,11 +1,11 @@
 import pytest
 
-from dundie.utils.email import check_valid_email
-from dundie.utils.user import generate_simple_password
 from dundie.database import get_session
-from dundie.models import Person, InvalidEmailError
+from dundie.models import InvalidEmailError, Person
 from dundie.utils.db import add_person
+from dundie.utils.email import check_valid_email
 from dundie.utils.login import validation_user_if_exist
+from dundie.utils.user import generate_simple_password
 
 
 @pytest.mark.unit
@@ -68,8 +68,8 @@ def test_positive_validation_user_if_exist(user):
         assert created is True
 
         session.commit()
-        
-        assert validation_user_if_exist(user) is True      
+
+        assert validation_user_if_exist(user) is True
 
 
 @pytest.mark.unit
@@ -102,5 +102,5 @@ def test_negative_validation_user_if_exist(user):
             assert created is True
 
             session.commit()
-            
+
             validation_user_if_exist(user)
