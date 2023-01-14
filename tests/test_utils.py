@@ -1,10 +1,11 @@
 import pytest
+from sqlmodel import select
 
 from dundie.database import get_session
-from dundie.models import InvalidEmailError, Person
+from dundie.models import Person, User
 from dundie.utils.db import add_person
 from dundie.utils.email import check_valid_email
-from dundie.utils.login import validation_user_if_exist
+from dundie.utils.login import validation_user_if_exist, validation_password, UserNotFoundError, InvalidPasswordError
 from dundie.utils.user import generate_simple_password
 
 
@@ -76,7 +77,7 @@ def test_positive_validation_user_if_exist(user):
 @pytest.mark.parametrize("user", ["flavio@doe.com", "jose@doe.com"])
 def test_negative_validation_user_if_exist(user):
     """Ensure user is valid"""
-    with pytest.raises(InvalidEmailError):
+    with pytest.raises(UserNotFoundError):
         with get_session() as session:
 
             joe = {
@@ -104,3 +105,94 @@ def test_negative_validation_user_if_exist(user):
             session.commit()
 
             validation_user_if_exist(user)
+
+
+@pytest.mark.unit
+@pytest.mark.parametrize(
+    ["user",
+    "password"], 
+    [("joe@doe.com", "12345678"),
+    ("jim@doe.com", "abcdefgh")]
+    )
+def test_negative_validation_password(user, password):
+    """Ensure password is valid"""
+    with pytest.raises(InvalidPasswordError):
+        with get_session() as session:
+
+            joe = {
+                "email": "joe@doe.com",
+                "name": "Joe Doe",
+                "dept": "Sales",
+                "role": "Salesman",
+            }
+
+            instance_joe = Person(**joe)
+            _, created = add_person(session=session, instance=instance_joe)
+            assert created is True
+
+            jim = {
+                "email": "jim@doe.com",
+                "name": "Jim Doe",
+                "dept": "Management",
+                "role": "Manager",
+            }
+
+            instance_jim = Person(**jim)
+            _, created = add_person(session=session, instance=instance_jim)
+            assert created is True
+
+            session.commit()
+
+            validation_password(user, password)
+
+
+@pytest.mark.unit
+@pytest.mark.parametrize(
+    ["user",
+    "password_"], 
+    [("joe@doe.com", "abC123zq"),
+    ("jim@doe.com", "qWert123")]
+    )
+def test_positive_validation_password(user, password_):
+    """Ensure password is valid"""    
+    with get_session() as session:
+
+        joe = {
+            "email": "joe@doe.com",
+            "name": "Joe Doe",
+            "dept": "Sales",
+            "role": "Salesman",
+        }
+
+        instance_joe = Person(**joe)
+        _, created = add_person(session=session, instance=instance_joe)
+
+        assert created is True
+
+        jim = {
+            "email": "jim@doe.com",
+            "name": "Jim Doe",
+            "dept": "Management",
+            "role": "Manager",
+        }
+
+        instance_jim = Person(**jim)
+        _, created = add_person(session=session, instance=instance_jim)
+
+        assert created is True                    
+
+        joe_update = session.exec(select(User).where(User.person == instance_joe)).one()
+        jim_update = session.exec(select(User).where(User.person == instance_jim)).one()
+
+        joe_update.password = "abC123zq"
+        jim_update.password = "qWert123"
+        
+        session.add(joe_update)
+        session.add(jim_update)
+
+        session.commit()
+
+        session.refresh(joe_update)
+        session.refresh(jim_update) 
+
+        assert validation_password(user, password_) is True
