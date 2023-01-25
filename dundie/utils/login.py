@@ -56,18 +56,17 @@ def validation_password(user: str, password: str) -> bool:
 def require_password() -> bool:
     """Input user and password"""
 
-    user =  os.getenv("DUNDIE_USER")
+    user = os.getenv("DUNDIE_USER")
     password = os.getenv("DUNDIE_PASSWORD")
 
-    if user and password:        
-        if validation_user_if_exist(user):                     
+    if user and password:
+        if validation_user_if_exist(user):
             if validation_password(user, password):
                 return True
-    
 
     elif user and not password:
         if validation_user_if_exist(user):
-            password = getpass.getpass()                     
+            password = getpass.getpass()
             if validation_password(user, password):
                 os.environ["DUNDIE_PASSWORD"] = password
                 return True
