@@ -169,7 +169,7 @@ def test_positive_validation_password(user, password_):
 
         joe_update = session.exec(
             select(User).where(User.person == instance_joe)
-        ).one()
+        ).first()
         joe_update.password = "qWert123"
         session.add(joe_update)
         session.commit()
