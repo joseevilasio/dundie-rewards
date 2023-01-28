@@ -5,6 +5,7 @@ from sqlmodel import select
 
 from dundie.database import get_session
 from dundie.models import InvalidEmailError, Person, User
+from dundie.settings import DUNDIE_ADMIN_USER, DUNDIE_ADMIN_USER_PASSWORD
 from dundie.utils.email import check_valid_email
 
 
@@ -26,6 +27,9 @@ def validation_user_if_exist(user: str) -> bool:
     if not check_valid_email(user):
         raise InvalidEmailError(f"Invalid email for {user!r}")
 
+    elif user == DUNDIE_ADMIN_USER:
+        return True
+
     with get_session() as session:
 
         instance = session.exec(
@@ -40,6 +44,12 @@ def validation_user_if_exist(user: str) -> bool:
 
 def validation_password(user: str, password: str) -> bool:
     """Ensure password is correct"""
+
+    if user == DUNDIE_ADMIN_USER:
+        if password == DUNDIE_ADMIN_USER_PASSWORD:
+            return True
+        else:
+            raise InvalidPasswordError(f"Invalid password for {user!r}")
 
     with get_session() as session:
 
