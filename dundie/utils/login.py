@@ -21,6 +21,10 @@ class AuthenticationError(Exception):
     ...
 
 
+class AccessDeniedError(Exception):
+    ...
+
+
 def validation_user_if_exist(user: str) -> bool:
     """Validation User if exist in database"""
 
