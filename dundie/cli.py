@@ -1,4 +1,5 @@
 import json
+import os
 
 import pkg_resources
 import rich_click as click
@@ -6,6 +7,7 @@ from rich.console import Console
 from rich.table import Table
 
 from dundie import core
+from dundie.settings import DUNDIE_ADMIN_USER
 from dundie.utils.login import require_password
 
 click.rich_click.USE_RICH_MARKUP = True
@@ -40,17 +42,26 @@ def load(filepath):
     - Parses the file
     - Loads to database
     """
-    table = Table(title="Dunder Mifflin Associates")
-    headers = ["email", "name", "dept", "role", "currency", "created"]
-    for header in headers:
-        table.add_column(header, style="magenta")
 
-    result = core.load(filepath)
-    for person in result:
-        table.add_row(*[str(value) for value in person.values()])
+    if require_password():
 
-    console = Console()
-    console.print(table)
+        if os.getenv("DUNDIE_USER") == DUNDIE_ADMIN_USER:
+
+            table = Table(title="Dunder Mifflin Associates")
+            headers = ["email", "name", "dept", "role", "currency", "created"]
+            for header in headers:
+                table.add_column(header, style="magenta")
+
+            result = core.load(filepath)
+            for person in result:
+                table.add_row(*[str(value) for value in person.values()])
+
+            console = Console()
+            console.print(table)
+
+        else:
+            console = Console()
+            console.print("⚠️ Access Denied ⚠️", style="rgb(255,0,0)")
 
 
 @main.command()
@@ -90,8 +101,17 @@ def show(output, **query):
 @click.pass_context
 def add(ctx, value, **query):
     """Add points to the user or dept."""
-    core.add(value, **query)
-    ctx.invoke(show, **query)
+
+    if require_password():
+
+        if os.getenv("DUNDIE_USER") == DUNDIE_ADMIN_USER:
+
+            core.add(value, **query)
+            ctx.invoke(show, **query)
+
+        else:
+            console = Console()
+            console.print("⚠️ Access Denied ⚠️", style="rgb(255,0,0)")
 
 
 @main.command()
@@ -101,5 +121,13 @@ def add(ctx, value, **query):
 @click.pass_context
 def remove(ctx, value, **query):
     """Removes points from the user or dept."""
-    core.add(-value, **query)
-    ctx.invoke(show, **query)
+    if require_password():
+
+        if os.getenv("DUNDIE_USER") == DUNDIE_ADMIN_USER:
+
+            core.add(-value, **query)
+            ctx.invoke(show, **query)
+
+        else:
+            console = Console()
+            console.print("⚠️ Access Denied ⚠️", style="rgb(255,0,0)")
