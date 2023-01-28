@@ -20,7 +20,7 @@ def test_load_positive_call_load_command():
     """test command load"""
 
     os.environ["DUNDIE_USER"] = DUNDIE_ADMIN_USER
-    os.environ["DUNDIE_PASSWORD"] = DUNDIE_ADMIN_USER_PASSWORD    
+    os.environ["DUNDIE_PASSWORD"] = DUNDIE_ADMIN_USER_PASSWORD
 
     out = cmd.invoke(load, PEOPLE_FILE)
     assert "Dunder Mifflin Associates" in out.output
