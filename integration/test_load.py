@@ -2,8 +2,13 @@ import os
 
 import pytest
 from click.testing import CliRunner
+from sqlmodel import select
 
 from dundie.cli import load, main
+from dundie.database import get_session
+from dundie.models import Person, User
+from dundie.utils.db import add_person
+from dundie.utils.login import AccessDeniedError
 
 from .constants import (
     DUNDIE_ADMIN_USER,
@@ -40,8 +45,32 @@ def test_load_negative_call_load_command_with_wrong_params(wrong_command):
 def test_load_negative_admin_interaction(request):
     """Test function load function."""
 
-    os.environ["DUNDIE_USER"] = "pam@dm.com"
-    os.environ["DUNDIE_PASSWORD"] = "OJ9ko5UG"
+    with get_session() as session:
 
-    out = cmd.invoke(load, PEOPLE_FILE)
-    assert out.exit_code != 0
+        joe = {
+            "email": "joe@doe.com",
+            "name": "Joe Doe",
+            "dept": "Sales",
+            "role": "Salesman",
+        }
+
+        instance_joe = Person(**joe)
+        _, created = add_person(session=session, instance=instance_joe)
+
+        assert created is True
+
+        joe_update = session.exec(
+            select(User).where(User.person == instance_joe)
+        ).first()
+        joe_update.password = "qWert123"
+        session.add(joe_update)
+        session.commit()
+        session.refresh(joe_update)
+
+        os.environ["DUNDIE_USER"] = "joe@doe.com"
+        os.environ["DUNDIE_PASSWORD"] = "qWert123"
+
+        out = cmd.invoke(load, PEOPLE_FILE)
+
+        assert out.exit_code != 0
+        assert AccessDeniedError
