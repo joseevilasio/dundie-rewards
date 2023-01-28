@@ -1,9 +1,15 @@
+import os
+
 import pytest
 from click.testing import CliRunner
 
 from dundie.cli import load, main
 
-from .constants import PEOPLE_FILE
+from .constants import (
+    DUNDIE_ADMIN_USER,
+    DUNDIE_ADMIN_USER_PASSWORD,
+    PEOPLE_FILE,
+)
 
 cmd = CliRunner()
 
@@ -12,6 +18,10 @@ cmd = CliRunner()
 @pytest.mark.medium
 def test_load_positive_call_load_command():
     """test command load"""
+
+    os.environ["DUNDIE_USER"] = DUNDIE_ADMIN_USER
+    os.environ["DUNDIE_PASSWORD"] = DUNDIE_ADMIN_USER_PASSWORD    
+
     out = cmd.invoke(load, PEOPLE_FILE)
     assert "Dunder Mifflin Associates" in out.output
 
@@ -24,3 +34,14 @@ def test_load_negative_call_load_command_with_wrong_params(wrong_command):
     out = cmd.invoke(main, wrong_command, PEOPLE_FILE)
     assert out.exit_code != 0
     assert f"No such command '{wrong_command}'." in out.output
+
+
+@pytest.mark.unit
+def test_load_negative_admin_interaction(request):
+    """Test function load function."""
+
+    os.environ["DUNDIE_USER"] = "pam@dm.com"
+    os.environ["DUNDIE_PASSWORD"] = "OJ9ko5UG"
+
+    out = cmd.invoke(load, PEOPLE_FILE)
+    assert out.exit_code != 0
