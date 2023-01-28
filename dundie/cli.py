@@ -8,7 +8,7 @@ from rich.table import Table
 
 from dundie import core
 from dundie.settings import DUNDIE_ADMIN_USER
-from dundie.utils.login import require_password
+from dundie.utils.login import AccessDeniedError, require_password
 
 click.rich_click.USE_RICH_MARKUP = True
 click.rich_click.USE_MARKDOWN = True
@@ -60,8 +60,7 @@ def load(filepath):
             console.print(table)
 
         else:
-            console = Console()
-            console.print("⚠️ Access Denied ⚠️", style="rgb(255,0,0)")
+            raise AccessDeniedError("⚠️ Access Denied ⚠️")
 
 
 @main.command()
@@ -110,8 +109,7 @@ def add(ctx, value, **query):
             ctx.invoke(show, **query)
 
         else:
-            console = Console()
-            console.print("⚠️ Access Denied ⚠️", style="rgb(255,0,0)")
+            raise AccessDeniedError("⚠️ Access Denied ⚠️")
 
 
 @main.command()
@@ -129,5 +127,4 @@ def remove(ctx, value, **query):
             ctx.invoke(show, **query)
 
         else:
-            console = Console()
-            console.print("⚠️ Access Denied ⚠️", style="rgb(255,0,0)")
+            raise AccessDeniedError("⚠️ Access Denied ⚠️")
