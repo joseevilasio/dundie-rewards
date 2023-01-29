@@ -73,6 +73,7 @@ def show(output, **query):
     if require_password():
 
         result = core.read(**query)
+
         if output:
             with open(output, "w") as output_file:
                 output_file.write(json.dumps(result))

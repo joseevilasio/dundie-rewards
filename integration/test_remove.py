@@ -10,10 +10,7 @@ from dundie.models import Person, User
 from dundie.utils.db import add_person
 from dundie.utils.login import AccessDeniedError
 
-from .constants import (
-    DUNDIE_ADMIN_USER,
-    DUNDIE_ADMIN_USER_PASSWORD,
-)
+from .constants import DUNDIE_ADMIN_USER, DUNDIE_ADMIN_USER_PASSWORD
 
 cmd = CliRunner()
 
@@ -52,7 +49,7 @@ def test_remove_positive_call_remove_command():
         os.environ["DUNDIE_USER"] = DUNDIE_ADMIN_USER
         os.environ["DUNDIE_PASSWORD"] = DUNDIE_ADMIN_USER_PASSWORD
 
-        out = cmd.invoke(remove, '100')
+        out = cmd.invoke(remove, "100")
 
         assert out.exit_code == 0
         assert instance_joe.balance[0].value == 400
@@ -64,7 +61,7 @@ def test_remove_positive_call_remove_command():
 @pytest.mark.parametrize("wrong_command", ["retirar", "remover", "apagar"])
 def test_remove_negative_call_remove_command_with_wrong_params(wrong_command):
     """test command remove"""
-    out = cmd.invoke(main, wrong_command, '100')
+    out = cmd.invoke(main, wrong_command, "100")
     assert out.exit_code != 0
     assert f"No such command '{wrong_command}'." in out.output
 
@@ -98,7 +95,7 @@ def test_remove_negative_admin_interaction(request):
         os.environ["DUNDIE_USER"] = "joe@doe.com"
         os.environ["DUNDIE_PASSWORD"] = "qWert123"
 
-        out = cmd.invoke(remove, '100')
+        out = cmd.invoke(remove, "100")
 
         assert out.exit_code != 0
         assert AccessDeniedError
