@@ -100,7 +100,6 @@ def require_password(admin_only: bool) -> bool:
                     os.environ["DUNDIE_USER"] = user
                     os.environ["DUNDIE_PASSWORD"] = password
                     return True
-
         else:
             raise AccessDeniedError("⚠️ Access Denied ⚠️")
 
@@ -126,7 +125,6 @@ def require_password(admin_only: bool) -> bool:
                     os.environ["DUNDIE_USER"] = user
                     os.environ["DUNDIE_PASSWORD"] = password
                     return True
-
         else:
             raise AccessDeniedError("⚠️ Access Denied ⚠️")
 
