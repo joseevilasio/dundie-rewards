@@ -7,7 +7,7 @@ from sqlmodel import select
 
 from dundie.database import get_session
 from dundie.models import Person
-from dundie.settings import DATEFMT, DUNDIE_ADMIN_USER
+from dundie.settings import DATEFMT
 from dundie.utils.db import add_movement, add_person
 from dundie.utils.exchange import get_rates
 from dundie.utils.log import get_logger
@@ -55,53 +55,13 @@ def read(**query: Query) -> ResultDict:
     return_data = []
     query_statements = []
 
-    user = os.getenv("DUNDIE_USER")
-
-    if user == DUNDIE_ADMIN_USER:
-
-        if "dept" in query:
-            query_statements.append(Person.dept == query["dept"])
-        if "email" in query:
-            query_statements.append(Person.email == query["email"])
-        sql = select(Person)
-        if query_statements:
-            sql = sql.where(*query_statements)
-
-    if user != DUNDIE_ADMIN_USER:
-
-        # Role, dept and email check
-        with get_session() as session:
-
-            role = session.exec(
-                select(Person.role).where(Person.email == user)
-            ).first()
-
-            dept = session.exec(
-                select(Person.dept).where(Person.email == user)
-            ).first()
-
-            emails = session.exec(
-                select(Person.email).where(Person.dept == dept)
-            ).all()
-
-        if role == "Manager":
-
-            if "email" in query and [
-                out_exp for out_exp in emails if out_exp == query["email"]
-            ]:
-
-                sql = (
-                    select(Person)
-                    .where(Person.email == query["email"])
-                    .where(Person.dept == dept)
-                )
-
-            else:
-                sql = select(Person).where(Person.dept == dept)
-
-        if role != "Manager":
-
-            sql = select(Person).where(Person.email == user)
+    if "dept" in query:
+        query_statements.append(Person.dept == query["dept"])
+    if "email" in query:
+        query_statements.append(Person.email == query["email"])
+    sql = select(Person)
+    if query_statements:
+        sql = sql.where(*query_statements)
 
     with get_session() as session:
         # obtemos toda as currencies existentes ["BRL", "USD", "EUR"]
