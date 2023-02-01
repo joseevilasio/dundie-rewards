@@ -36,7 +36,6 @@ def validation_user_if_exist(user: str) -> bool:
         return True
 
     with get_session() as session:
-
         instance = session.exec(
             select(Person.email).where(Person.email == user)
         ).first()
@@ -57,7 +56,6 @@ def validation_password(user: str, password: str) -> bool:
             raise InvalidPasswordError(f"Invalid password for {user!r}")
 
     with get_session() as session:
-
         instance_person = session.exec(
             select(Person.id).where(Person.email == user)
         ).first()
@@ -79,7 +77,6 @@ def require_password(admin_only: bool) -> bool:
     password = os.getenv("DUNDIE_PASSWORD")
 
     if not admin_only:
-
         if user and password:
             if validation_user_if_exist(user):
                 if validation_password(user, password):
@@ -104,7 +101,6 @@ def require_password(admin_only: bool) -> bool:
             raise AccessDeniedError("⚠️ Access Denied ⚠️")
 
     elif admin_only:
-
         if user and password:
             if user == DUNDIE_ADMIN_USER:
                 if password == DUNDIE_ADMIN_USER_PASSWORD:
@@ -139,7 +135,6 @@ def handles_query_for_user(**query):
     user = os.getenv("DUNDIE_USER")
 
     with get_session() as session:
-
         role = session.exec(
             select(Person.role).where(Person.email == user)
         ).first()

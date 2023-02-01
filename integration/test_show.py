@@ -20,7 +20,6 @@ def test_show_positive_call_show_command():
     """test command show"""
 
     with get_session() as session:
-
         joe = {
             "email": "joe@doe.com",
             "name": "Joe Doe",
@@ -61,7 +60,6 @@ def test_show_call_show_command_with_only_infor_user():
     """test command show"""
 
     with get_session() as session:
-
         joe = {
             "email": "joe@doe.com",
             "name": "Joe Doe",
@@ -108,7 +106,6 @@ def test_show_call_show_command_with_only_infor_user_manager():
     """test command show"""
 
     with get_session() as session:
-
         joe = {
             "email": "joe@doe.com",
             "name": "Joe Doe",

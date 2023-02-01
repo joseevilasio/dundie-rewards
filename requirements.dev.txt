@@ -7,7 +7,7 @@ pytest-watch
 # code quality
 flake8
 pyproject-flake8
-black <= 22.10.0
+black
 isort
 
 # docs

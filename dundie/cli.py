@@ -42,7 +42,6 @@ def load(filepath):
     """
 
     if require_password(admin_only=True):
-
         table = Table(title="Dunder Mifflin Associates")
         headers = ["email", "name", "dept", "role", "currency", "created"]
         for header in headers:
@@ -64,7 +63,6 @@ def show(output, **query):
     """Shows information about user or dept."""
 
     if require_password(admin_only=False):
-
         result = handles_query_for_user(**query)
 
         if output:
@@ -96,7 +94,6 @@ def add(ctx, value, **query):
     """Add points to the user or dept."""
 
     if require_password(admin_only=True):
-
         core.add(value, **query)
         ctx.invoke(show, **query)
 
@@ -110,6 +107,5 @@ def remove(ctx, value, **query):
     """Removes points from the user or dept."""
 
     if require_password(admin_only=True):
-
         core.add(-value, **query)
         ctx.invoke(show, **query)

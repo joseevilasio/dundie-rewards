@@ -50,7 +50,6 @@ def test_generate_simple_password():
 def test_positive_validation_user_if_exist(user):
     """Ensure user is valid"""
     with get_session() as session:
-
         joe = {
             "email": "joe@doe.com",
             "name": "Joe Doe",
@@ -84,7 +83,6 @@ def test_negative_validation_user_if_exist(user):
     """Ensure user is valid"""
     with pytest.raises(UserNotFoundError):
         with get_session() as session:
-
             joe = {
                 "email": "joe@doe.com",
                 "name": "Joe Doe",
@@ -121,7 +119,6 @@ def test_negative_validation_password(user, password):
     """Ensure password is valid"""
     with pytest.raises(InvalidPasswordError):
         with get_session() as session:
-
             joe = {
                 "email": "joe@doe.com",
                 "name": "Joe Doe",
@@ -154,7 +151,6 @@ def test_negative_validation_password(user, password):
 def test_positive_validation_password(user, password_):
     """Ensure password is valid"""
     with get_session() as session:
-
         joe = {
             "email": "joe@doe.com",
             "name": "Joe Doe",

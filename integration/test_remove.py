@@ -21,7 +21,6 @@ def test_remove_positive_call_remove_command():
     """test command remove"""
 
     with get_session() as session:
-
         joe = {
             "email": "joe@doe.com",
             "name": "Joe Doe",
@@ -71,7 +70,6 @@ def test_remove_negative_admin_interaction(request):
     """Test function add function."""
 
     with get_session() as session:
-
         joe = {
             "email": "joe@doe.com",
             "name": "Joe Doe",

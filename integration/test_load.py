@@ -46,7 +46,6 @@ def test_load_negative_admin_interaction(request):
     """Test function load function."""
 
     with get_session() as session:
-
         joe = {
             "email": "joe@doe.com",
             "name": "Joe Doe",

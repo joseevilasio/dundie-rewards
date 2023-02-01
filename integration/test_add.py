@@ -21,7 +21,6 @@ def test_add_positive_call_add_command():
     """test command add"""
 
     with get_session() as session:
-
         joe = {
             "email": "joe@doe.com",
             "name": "Joe Doe",
@@ -71,7 +70,6 @@ def test_add_negative_admin_interaction(request):
     """Test function add function."""
 
     with get_session() as session:
-
         joe = {
             "email": "joe@doe.com",
             "name": "Joe Doe",

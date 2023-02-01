@@ -8,9 +8,7 @@ from dundie.utils.db import add_person
 
 @pytest.mark.unit
 def test_add_movement():
-
     with get_session() as session:
-
         joe = {
             "email": "joe@doe.com",
             "name": "Joe Doe",
