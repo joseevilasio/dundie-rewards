@@ -4,11 +4,10 @@ import pytest
 from click.testing import CliRunner
 from sqlmodel import select
 
-from dundie.cli import main, remove
+from dundie.cli import main, show
 from dundie.database import get_session
 from dundie.models import Person, User
 from dundie.utils.db import add_person
-from dundie.utils.login import AccessDeniedError
 
 from .constants import DUNDIE_ADMIN_USER, DUNDIE_ADMIN_USER_PASSWORD
 
@@ -17,8 +16,8 @@ cmd = CliRunner()
 
 @pytest.mark.integration
 @pytest.mark.medium
-def test_remove_positive_call_remove_command():
-    """test command remove"""
+def test_show_positive_call_show_command():
+    """test command show"""
 
     with get_session() as session:
 
@@ -49,26 +48,17 @@ def test_remove_positive_call_remove_command():
         os.environ["DUNDIE_USER"] = DUNDIE_ADMIN_USER
         os.environ["DUNDIE_PASSWORD"] = DUNDIE_ADMIN_USER_PASSWORD
 
-        out = cmd.invoke(remove, "100")
+        out = cmd.invoke(show)
 
         assert out.exit_code == 0
-        assert instance_joe.balance[0].value == 400
-        assert instance_jim.balance[0].value == 0
+        assert "joe@doe.com" in out.output
+        assert "jim@doe.com" in out.output
 
 
 @pytest.mark.integration
 @pytest.mark.medium
-@pytest.mark.parametrize("wrong_command", ["retirar", "remover", "apagar"])
-def test_remove_negative_call_remove_command_with_wrong_params(wrong_command):
-    """test command remove"""
-    out = cmd.invoke(main, wrong_command, "100")
-    assert out.exit_code != 0
-    assert f"No such command '{wrong_command}'." in out.output
-
-
-@pytest.mark.unit
-def test_remove_negative_admin_interaction(request):
-    """Test function add function."""
+def test_show_call_show_command_with_only_infor_user():
+    """test command show"""
 
     with get_session() as session:
 
@@ -81,7 +71,17 @@ def test_remove_negative_admin_interaction(request):
 
         instance_joe = Person(**joe)
         _, created = add_person(session=session, instance=instance_joe)
+        assert created is True
 
+        jim = {
+            "email": "jim@doe.com",
+            "name": "Jim Doe",
+            "dept": "Management",
+            "role": "Manager",
+        }
+
+        instance_jim = Person(**jim)
+        _, created = add_person(session=session, instance=instance_jim)
         assert created is True
 
         joe_update = session.exec(
@@ -95,7 +95,77 @@ def test_remove_negative_admin_interaction(request):
         os.environ["DUNDIE_USER"] = "joe@doe.com"
         os.environ["DUNDIE_PASSWORD"] = "qWert123"
 
-        out = cmd.invoke(remove, "100")
+        out = cmd.invoke(show)
 
-        assert out.exit_code != 0
-        assert AccessDeniedError
+        assert out.exit_code == 0
+        assert "joe@doe.com" in out.output
+        assert "jim@doe.com" not in out.output
+
+
+@pytest.mark.integration
+@pytest.mark.medium
+def test_show_call_show_command_with_only_infor_user_manager():
+    """test command show"""
+
+    with get_session() as session:
+
+        joe = {
+            "email": "joe@doe.com",
+            "name": "Joe Doe",
+            "dept": "Sales",
+            "role": "Salesman",
+        }
+
+        instance_joe = Person(**joe)
+        _, created = add_person(session=session, instance=instance_joe)
+        assert created is True
+
+        otto = {
+            "email": "otto@doe.com",
+            "name": "Otto Doe",
+            "dept": "TI",
+            "role": "Software Enginer",
+        }
+
+        instance_otto = Person(**otto)
+        _, created = add_person(session=session, instance=instance_otto)
+        assert created is True
+
+        jim = {
+            "email": "jim@doe.com",
+            "name": "Jim Doe",
+            "dept": "Sales",
+            "role": "Manager",
+        }
+
+        instance_jim = Person(**jim)
+        _, created = add_person(session=session, instance=instance_jim)
+        assert created is True
+
+        jim_update = session.exec(
+            select(User).where(User.person == instance_jim)
+        ).first()
+        jim_update.password = "qWert123"
+        session.add(jim_update)
+        session.commit()
+        session.refresh(jim_update)
+
+        os.environ["DUNDIE_USER"] = "jim@doe.com"
+        os.environ["DUNDIE_PASSWORD"] = "qWert123"
+
+        out = cmd.invoke(show)
+
+        assert out.exit_code == 0
+        assert "joe@doe.com" in out.output
+        assert "jim@doe.com" in out.output
+        assert "otto@doe.com" not in out.output
+
+
+@pytest.mark.integration
+@pytest.mark.medium
+@pytest.mark.parametrize("wrong_command", ["mostrar", "showw", "ver"])
+def test_show_negative_call_show_command_with_wrong_params(wrong_command):
+    """test command show"""
+    out = cmd.invoke(main, wrong_command)
+    assert out.exit_code != 0
+    assert f"No such command '{wrong_command}'." in out.output
