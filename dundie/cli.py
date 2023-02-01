@@ -1,5 +1,4 @@
 import json
-import os
 
 import pkg_resources
 import rich_click as click
@@ -7,8 +6,7 @@ from rich.console import Console
 from rich.table import Table
 
 from dundie import core
-from dundie.settings import DUNDIE_ADMIN_USER
-from dundie.utils.login import AccessDeniedError, require_password
+from dundie.utils.login import handles_query_for_user, require_password
 
 click.rich_click.USE_RICH_MARKUP = True
 click.rich_click.USE_MARKDOWN = True
@@ -43,24 +41,19 @@ def load(filepath):
     - Loads to database
     """
 
-    if require_password():
+    if require_password(admin_only=True):
 
-        if os.getenv("DUNDIE_USER") == DUNDIE_ADMIN_USER:
+        table = Table(title="Dunder Mifflin Associates")
+        headers = ["email", "name", "dept", "role", "currency", "created"]
+        for header in headers:
+            table.add_column(header, style="magenta")
 
-            table = Table(title="Dunder Mifflin Associates")
-            headers = ["email", "name", "dept", "role", "currency", "created"]
-            for header in headers:
-                table.add_column(header, style="magenta")
+        result = core.load(filepath)
+        for person in result:
+            table.add_row(*[str(value) for value in person.values()])
 
-            result = core.load(filepath)
-            for person in result:
-                table.add_row(*[str(value) for value in person.values()])
-
-            console = Console()
-            console.print(table)
-
-        else:
-            raise AccessDeniedError("⚠️ Access Denied ⚠️")
+        console = Console()
+        console.print(table)
 
 
 @main.command()
@@ -70,9 +63,9 @@ def load(filepath):
 def show(output, **query):
     """Shows information about user or dept."""
 
-    if require_password():
+    if require_password(admin_only=False):
 
-        result = core.read(**query)
+        result = handles_query_for_user(**query)
 
         if output:
             with open(output, "w") as output_file:
@@ -102,15 +95,10 @@ def show(output, **query):
 def add(ctx, value, **query):
     """Add points to the user or dept."""
 
-    if require_password():
+    if require_password(admin_only=True):
 
-        if os.getenv("DUNDIE_USER") == DUNDIE_ADMIN_USER:
-
-            core.add(value, **query)
-            ctx.invoke(show, **query)
-
-        else:
-            raise AccessDeniedError("⚠️ Access Denied ⚠️")
+        core.add(value, **query)
+        ctx.invoke(show, **query)
 
 
 @main.command()
@@ -120,12 +108,8 @@ def add(ctx, value, **query):
 @click.pass_context
 def remove(ctx, value, **query):
     """Removes points from the user or dept."""
-    if require_password():
 
-        if os.getenv("DUNDIE_USER") == DUNDIE_ADMIN_USER:
+    if require_password(admin_only=True):
 
-            core.add(-value, **query)
-            ctx.invoke(show, **query)
-
-        else:
-            raise AccessDeniedError("⚠️ Access Denied ⚠️")
+        core.add(-value, **query)
+        ctx.invoke(show, **query)
