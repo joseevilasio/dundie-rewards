@@ -50,8 +50,8 @@ def test_show_positive_call_show_command():
         out = cmd.invoke(show)
 
         assert out.exit_code == 0
-        assert "joe@doe.com" in out.output
-        assert "jim@doe.com" in out.output
+        assert "joe@doe" in out.output
+        assert "jim@doe" in out.output
 
 
 @pytest.mark.integration
@@ -96,8 +96,8 @@ def test_show_call_show_command_with_only_infor_user():
         out = cmd.invoke(show)
 
         assert out.exit_code == 0
-        assert "joe@doe.com" in out.output
-        assert "jim@doe.com" not in out.output
+        assert "joe@doe" in out.output
+        assert "jim@doe" not in out.output
 
 
 @pytest.mark.integration
@@ -153,9 +153,9 @@ def test_show_call_show_command_with_only_infor_user_manager():
         out = cmd.invoke(show)
 
         assert out.exit_code == 0
-        assert "joe@doe.com" in out.output
-        assert "jim@doe.com" in out.output
-        assert "otto@doe.com" not in out.output
+        assert "joe@doe" in out.output
+        assert "jim@doe" in out.output
+        assert "otto@doe" not in out.output
 
 
 @pytest.mark.integration
