@@ -15,7 +15,6 @@ from dundie.utils.db import add_movement, add_person
 @pytest.mark.unit
 def test_commit_to_database():
     with get_session() as session:
-
         data = {
             "email": "joe@doe.com",
             "name": "Joe Doe",
@@ -41,7 +40,6 @@ def test_commit_to_database():
 @pytest.mark.unit
 def test_add_person_for_the_first_time():
     with get_session() as session:
-
         data = {
             "email": "joe@doe.com",
             "name": "Joe Doe",
@@ -72,9 +70,7 @@ def test_add_person_for_the_first_time():
 @pytest.mark.unit
 def test_negative_add_person_invalid_email():
     with pytest.raises(InvalidEmailError):
-
         with get_session() as session:
-
             data = {
                 "email": "joe@",
                 "name": "Joe Doe",
@@ -89,9 +85,7 @@ def test_negative_add_person_invalid_email():
 
 @pytest.mark.unit
 def test_add_or_remove_points_for_person():
-
     with get_session() as session:
-
         data = {
             "email": "joe@doe.com",
             "name": "Joe Doe",
