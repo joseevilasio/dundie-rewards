@@ -4,7 +4,7 @@ import pytest
 from click.testing import CliRunner
 from sqlmodel import select
 
-from dundie.cli import main, movements
+from dundie.cli import main, show
 from dundie.database import get_session
 from dundie.models import Person, User
 from dundie.utils.db import add_person
@@ -16,8 +16,8 @@ cmd = CliRunner()
 
 @pytest.mark.integration
 @pytest.mark.medium
-def test_movements_positive_call_movements_command():
-    """test command movements"""
+def test_show_positive_call_show_command():
+    """test command show"""
 
     with get_session() as session:
         joe = {
@@ -47,17 +47,17 @@ def test_movements_positive_call_movements_command():
         os.environ["DUNDIE_USER"] = DUNDIE_ADMIN_USER
         os.environ["DUNDIE_PASSWORD"] = DUNDIE_ADMIN_USER_PASSWORD
 
-        out = cmd.invoke(movements)
+        out = cmd.invoke(show)
 
         assert out.exit_code == 0
-        assert "Joe" in out.output
-        assert "Jim" in out.output
+        assert "joe" in out.output
+        assert "jim" in out.output
 
 
 @pytest.mark.integration
 @pytest.mark.medium
-def test_movements_call_movements_command_with_only_infor_user():
-    """test command movements"""
+def test_show_call_show_command_with_only_infor_user():
+    """test command show"""
 
     with get_session() as session:
         joe = {
@@ -93,17 +93,17 @@ def test_movements_call_movements_command_with_only_infor_user():
         os.environ["DUNDIE_USER"] = "joe@doe.com"
         os.environ["DUNDIE_PASSWORD"] = "qWert123"
 
-        out = cmd.invoke(movements)
+        out = cmd.invoke(show)
 
         assert out.exit_code == 0
-        assert "Joe" in out.output
-        assert "Jim" not in out.output
+        assert "joe" in out.output
+        assert "jim" not in out.output
 
 
 @pytest.mark.integration
 @pytest.mark.medium
-def test_movements_call_movements_command_with_only_infor_user_manager():
-    """test command movements"""
+def test_show_call_show_command_with_only_infor_user_manager():
+    """test command show"""
 
     with get_session() as session:
         joe = {
@@ -150,21 +150,19 @@ def test_movements_call_movements_command_with_only_infor_user_manager():
         os.environ["DUNDIE_USER"] = "jim@doe.com"
         os.environ["DUNDIE_PASSWORD"] = "qWert123"
 
-        out = cmd.invoke(movements)
+        out = cmd.invoke(show)
 
         assert out.exit_code == 0
-        assert "Joe" in out.output
-        assert "Jim" in out.output
-        assert "Otto" not in out.output
+        assert "joe" in out.output
+        assert "jim" in out.output
+        assert "otto" not in out.output
 
 
 @pytest.mark.integration
 @pytest.mark.medium
-@pytest.mark.parametrize("wrong_command", ["report", "moviments", "movimento"])
-def test_movements_negative_call_movements_command_with_wrong_params(
-    wrong_command,
-):
-    """test command movements"""
+@pytest.mark.parametrize("wrong_command", ["mostrar", "showw", "ver"])
+def test_show_negative_call_show_command_with_wrong_params(wrong_command):
+    """test command show"""
     out = cmd.invoke(main, wrong_command)
     assert out.exit_code != 0
     assert f"No such command '{wrong_command}'." in out.output
