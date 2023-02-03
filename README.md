@@ -30,7 +30,7 @@ Os dados dos funcionários atuais serão fornecidos em um arquivo que pode ser n
 ## Installation
 
 ```py
-pip install seunome-dundie
+pip install dundie
 ```
 
 ```py
@@ -38,15 +38,5 @@ pip install -e `.[dev]`
 ```
 
 ## Usage
-```py
-dundie load assets/people.csv
-```
-```py
-dundie show
-```
-```py
-dundie add
-```
-```py
-dundie remove
-```
+
+![](./assets/dundie_usage.gif)
