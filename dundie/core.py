@@ -98,7 +98,6 @@ def add(value: int, **query: Query):
         raise RuntimeError("Not Found")
 
     with get_session() as session:
-        
         user = (
             os.getenv("DUNDIE_USER")
             if os.getenv("DUNDIE_USER")
