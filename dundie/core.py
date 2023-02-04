@@ -98,7 +98,12 @@ def add(value: int, **query: Query):
         raise RuntimeError("Not Found")
 
     with get_session() as session:
-        user = os.getenv("DUNDIE_USER")
+        
+        user = (
+            os.getenv("DUNDIE_USER")
+            if os.getenv("DUNDIE_USER")
+            else os.getenv("USER")
+        )
         for person in people:
             instance = session.exec(
                 select(Person).where(Person.email == person["email"])
