@@ -149,7 +149,7 @@ def transfer(value: int, to: str) -> str:
 
     with get_session() as session:
         balance = session.exec(
-            select(Balance.value).where(Person.email == user)
+            select(Balance.value).join(Person).where(Person.email == user)
         ).first()
 
         if validation_user_if_exist(to):
