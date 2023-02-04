@@ -1,16 +1,18 @@
 """Core module of dundie"""
 import os
 from csv import reader
+from decimal import Decimal
 from typing import Any, Dict, List
 
 from sqlmodel import select
 
 from dundie.database import get_session
-from dundie.models import Movement, Person
+from dundie.models import Balance, Movement, Person
 from dundie.settings import DATEFMT
 from dundie.utils.db import add_movement, add_person
 from dundie.utils.exchange import get_rates
 from dundie.utils.log import get_logger
+from dundie.utils.login import validation_user_if_exist
 
 log = get_logger()
 Query = Dict[str, Any]
@@ -96,7 +98,7 @@ def add(value: int, **query: Query):
         raise RuntimeError("Not Found")
 
     with get_session() as session:
-        user = os.getenv("USER")
+        user = os.getenv("DUNDIE_USER")
         for person in people:
             instance = session.exec(
                 select(Person).where(Person.email == person["email"])
@@ -134,3 +136,29 @@ def read_movements(**query: Query) -> ResultDict:
                 }
             )
     return return_data
+
+
+def transfer(value: int, to: str) -> str:
+    """Transfer points between users.
+
+    Example::
+    dundie transfer 100 pam@dm.com
+    """
+
+    user = os.getenv("DUNDIE_USER")
+
+    with get_session() as session:
+        balance = session.exec(
+            select(Balance.value).where(Person.email == user)
+        ).first()
+
+        if validation_user_if_exist(to):
+            if Decimal(value) <= balance:
+                add(-value, email=user)
+                add(value, email=to)
+
+                print("Points transferred successfully\n")
+                print(f">> {user} transferred {to} <<\n")
+
+            else:
+                print("Falied! User does not have enough balance!\n")
