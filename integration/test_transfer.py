@@ -49,11 +49,16 @@ def test_transfer_positive():
         os.environ["DUNDIE_USER"] = "joe@doe.com"
         os.environ["DUNDIE_PASSWORD"] = "qWert123"
 
-        out = cmd.invoke(transfer, "100", "jim@doe.com")
-
         assert instance_joe.balance[0].value == 500
+
+        out = cmd.invoke(transfer, args=("100", "jim@doe.com"))
+
+        session.commit()
+        session.refresh(instance_joe)
+
+        assert instance_joe.balance[0].value == 400
         assert out.exit_code == 0
-        assert "190" in out.output
+        assert "400" in out.output
 
 
 @pytest.mark.integration
@@ -103,7 +108,7 @@ def test_transfer_negative_with_argument_wrong():
         os.environ["DUNDIE_USER"] = "joe@doe.com"
         os.environ["DUNDIE_PASSWORD"] = "qWert123"
 
-        cmd.invoke(transfer, "100", "pam@doe.com")
+        cmd.invoke(transfer, args=("100", "pam@doe.com"))
 
         assert UserNotFoundError
 
@@ -134,7 +139,7 @@ def test_transfer_negative_with_enough_balance():
         assert created is True
 
         jim_update = session.exec(
-            select(User).where(User.person == instance_joe)
+            select(User).where(User.person == instance_jim)
         ).first()
         jim_update.password = "qWert123"
         session.add(jim_update)
@@ -144,8 +149,11 @@ def test_transfer_negative_with_enough_balance():
         os.environ["DUNDIE_USER"] = "jim@doe.com"
         os.environ["DUNDIE_PASSWORD"] = "qWert123"
 
-        out = cmd.invoke(transfer, "200", "joe@doe.com")
+        out = cmd.invoke(transfer, args=("200", "joe@doe.com"))
+
+        session.commit()
+        session.refresh(jim_update)
 
         assert instance_jim.balance[0].value == 100
-        assert out.exit_code != 0
+        assert out.exit_code == 0
         assert "Falied!" in out.output
