@@ -138,7 +138,7 @@ def movements(**query):
 
 @main.command()
 @click.argument("value", type=click.INT, required=True)
-@click.argument("to", required=True)
+@click.argument("to", type=click.STRING, required=True)
 @click.pass_context
 def transfer(ctx, value, to):
     """Transfer points between users."""
