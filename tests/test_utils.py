@@ -11,7 +11,7 @@ from dundie.utils.login import (
     validation_password,
     validation_user_if_exist,
 )
-from dundie.utils.user import generate_simple_password
+from dundie.utils.user import generate_simple_password, password_encrypt
 
 
 @pytest.mark.unit
@@ -113,7 +113,10 @@ def test_negative_validation_user_if_exist(user):
 @pytest.mark.unit
 @pytest.mark.parametrize(
     ["user", "password"],
-    [("joe@doe.com", "12345678"), ("jim@doe.com", "abcdefgh")],
+    [
+        ("joe@doe.com", password_encrypt("12345678")),
+        ("jim@doe.com", password_encrypt("abcdefgh")),
+    ],
 )
 def test_negative_validation_password(user, password):
     """Ensure password is valid"""
@@ -147,7 +150,9 @@ def test_negative_validation_password(user, password):
 
 
 @pytest.mark.unit
-@pytest.mark.parametrize(["user", "password_"], [("joe@doe.com", "qWert123")])
+@pytest.mark.parametrize(
+    ["user", "password_"], [("joe@doe.com", password_encrypt("qWert123"))]
+)
 def test_positive_validation_password(user, password_):
     """Ensure password is valid"""
     with get_session() as session:
@@ -166,7 +171,7 @@ def test_positive_validation_password(user, password_):
         joe_update = session.exec(
             select(User).where(User.person == instance_joe)
         ).first()
-        joe_update.password = "qWert123"
+        joe_update.password = password_encrypt("qWert123")
         session.add(joe_update)
         session.commit()
         session.refresh(joe_update)
