@@ -5,4 +5,4 @@ pydantic
 sqlmodel
 alembic
 httpx
-    
+cryptography
