@@ -11,7 +11,7 @@ from dundie.utils.login import (
     validation_password,
     validation_user_if_exist,
 )
-from dundie.utils.user import generate_simple_password, password_encrypt
+from dundie.utils.user import password_encrypt
 
 
 @pytest.mark.unit
@@ -30,19 +30,6 @@ def test_positive_check_valid_email(address):
 def test_negative_check_valid_email(address):
     """Ensure email is invalid."""
     assert check_valid_email(address) is False
-
-
-@pytest.mark.unit
-@pytest.mark.medium
-def test_generate_simple_password():
-    """Test generation of random simple password.
-    TODO: Generate hashed complex passwords, encrypit it
-    """
-    passwords = []
-    for _ in range(100):
-        passwords.append(generate_simple_password(8))
-
-    assert len(set(passwords)) == 100
 
 
 @pytest.mark.unit

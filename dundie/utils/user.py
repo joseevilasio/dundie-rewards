@@ -25,10 +25,7 @@ def password_decrypt(password: str) -> str:
 
     factory_encrypt = Fernet(SECRET_KEY)
 
-    value = password
-    value_bytes = bytes(value, encoding="utf-8")
-
-    token = factory_encrypt.decrypt(value_bytes)
+    token = factory_encrypt.decrypt(password)
     result = token.decode()
 
     return result
@@ -39,7 +36,6 @@ def generate_simple_password(size=8):
     [A-Z][a-z][0-9]
     """
     password = sample(ascii_letters + digits, size)
+    password = password_encrypt(str("".join(password)))
 
-    password = password_encrypt(str(password))
-
-    return "".join(password)
+    return password
