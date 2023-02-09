@@ -10,7 +10,11 @@ from dundie.models import Person, User
 from dundie.utils.db import add_person
 from dundie.utils.user import password_encrypt
 
-from .constants import DUNDIE_ADMIN_USER, DUNDIE_ADMIN_USER_PASSWORD, TEST_PATH_OUTPUT
+from .constants import (
+    DUNDIE_ADMIN_USER,
+    DUNDIE_ADMIN_USER_PASSWORD,
+    TEST_PATH_OUTPUT,
+)
 
 cmd = CliRunner()
 
@@ -171,14 +175,14 @@ def test_show_negative_call_show_command_with_wrong_params(wrong_command):
 
 @pytest.mark.integration
 def test_show_call_show_empty():
-    """test command show, call show when empty"""     
+    """test command show, call show when empty"""
 
     os.environ["DUNDIE_USER"] = DUNDIE_ADMIN_USER
     os.environ["DUNDIE_PASSWORD"] = DUNDIE_ADMIN_USER_PASSWORD
 
     out = cmd.invoke(show)
 
-    assert out.exit_code == 0    
+    assert out.exit_code == 0
     assert "Nothing to show" in out.output
 
 
@@ -217,4 +221,4 @@ def test_show_positive_call_show_option_output():
         out = cmd.invoke(show, args=("--output", TEST_PATH_OUTPUT))
 
         assert out.exit_code == 0
-        assert "Sucess! File saved in" in out.output       
+        assert "Sucess! File saved in" in out.output
