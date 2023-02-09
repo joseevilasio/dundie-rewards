@@ -67,22 +67,27 @@ def show(output, **query):
 
         if output:
             with open(output, "w") as output_file:
-                output_file.write(json.dumps(result))
+                output_file.write(json.dumps(result, use_decimal=True))
+                console = Console()
+                console.print(f"Sucess! File saved in {output} ", justify="center", style="red on white")
 
-        if len(result) == 0:
-            print("Nothing to show")
+        elif len(result) == 0:
+            #TODO: Interface in command line make too pretty
+            console = Console()
+            console.print("Nothing to show", justify="center", style="red on white")            
 
-        table = Table(title="Dunder Mifflin Report")
-        for key in result[0]:
-            table.add_column(key.title().replace("_", " "), style="magenta")
+        else:
+            table = Table(title="Dunder Mifflin Report")
+            for key in result[0]:
+                table.add_column(key.title().replace("_", " "), style="magenta")
 
-        for person in result:
-            person["value"] = f"{person['value']:.2f}"
-            person["balance"] = f"{person['balance']:.2f}"
-            table.add_row(*[str(value) for value in person.values()])
+            for person in result:
+                person["value"] = f"{person['value']:.2f}"
+                person["balance"] = f"{person['balance']:.2f}"
+                table.add_row(*[str(value) for value in person.values()])
 
-        console = Console()
-        console.print(table)
+            console = Console()
+            console.print(table)
 
 
 @main.command()
@@ -121,19 +126,22 @@ def movements(**query):
         result = handles_query_for_user(core.read_movements, **query)
 
         if len(result) == 0:
-            print("Nothing to show")
 
-        table = Table(title="Dunder Mifflin Report", style="red")
+            console = Console()
+            console.print("Nothing to show", justify="center", style="red on white")         
+        
+        else:
+            table = Table(title="Dunder Mifflin Report", style="red")
 
-        for key in result[0]:
-            table.add_column(key.title().replace("_", " "), style="green")
+            for key in result[0]:
+                table.add_column(key.title().replace("_", " "), style="green")
 
-        for person in result:
-            person["value"] = f"{person['value']:.2f}"
-            table.add_row(*[str(value) for value in person.values()])
+            for person in result:
+                person["value"] = f"{person['value']:.2f}"
+                table.add_row(*[str(value) for value in person.values()])
 
-        console = Console()
-        console.print(table)
+            console = Console()
+            console.print(table)
 
 
 @main.command()
