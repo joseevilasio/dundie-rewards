@@ -228,7 +228,7 @@ def test_show_positive_call_show_option_output():
 @pytest.mark.integration
 def test_show_negative_call_show_option_output():
     """test command negative show call show with option output"""
-    
+
     with get_session() as session:
         joe = {
             "email": "joe@doe.com",
@@ -257,5 +257,5 @@ def test_show_negative_call_show_option_output():
         os.environ["DUNDIE_USER"] = DUNDIE_ADMIN_USER
         os.environ["DUNDIE_PASSWORD"] = DUNDIE_ADMIN_USER_PASSWORD
 
-        out = cmd.invoke(show, args=("--output", TEST_PATH_OUTPUT_ERROR))
+        cmd.invoke(show, args=("--output", TEST_PATH_OUTPUT_ERROR))
         assert NotADirectoryError
