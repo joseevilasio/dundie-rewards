@@ -110,3 +110,25 @@ def test_add_or_remove_points_for_person():
         assert after == before - 100
         assert before == 500
         assert after == 400
+
+
+@pytest.mark.unit
+def test_add_person_existing_person():
+    with get_session() as session:
+        data = {
+            "email": "joe@doe.com",
+            "name": "Joe Doe",
+            "dept": "Sales",
+            "role": "Salesman",
+        }
+
+        instance = Person(**data)
+
+        _, created = add_person(session, instance)
+        assert created is True
+
+        session.commit()
+
+        _, new_created = add_person(session, instance)
+
+        assert new_created is False
