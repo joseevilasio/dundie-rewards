@@ -44,4 +44,3 @@ def test_add_movement():
 def test_add_movement_negative_query_empty():
     with pytest.raises(RuntimeError):
         add(-30, email="joe@doe.com")
-        add(90, dept="Management")

@@ -63,7 +63,7 @@ def test_add_person_for_the_first_time():
 @pytest.mark.unit
 def test_negative_add_person_invalid_email():
     with pytest.raises(InvalidEmailError):
-        with get_session() as session:
+        with get_session() as _:
             data = {
                 "email": "joe@",
                 "name": "Joe Doe",
@@ -71,9 +71,7 @@ def test_negative_add_person_invalid_email():
                 "role": "Salesman",
             }
 
-            instance = Person(**data)
-
-            add_person(session, instance)
+            Person(**data)
 
 
 @pytest.mark.unit
