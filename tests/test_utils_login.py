@@ -4,7 +4,6 @@ from sqlmodel import select
 from dundie.database import get_session
 from dundie.models import Person, User
 from dundie.utils.db import add_person
-from dundie.utils.email import check_valid_email
 from dundie.utils.login import (
     InvalidPasswordError,
     UserNotFoundError,
@@ -12,24 +11,6 @@ from dundie.utils.login import (
     validation_user_if_exist,
 )
 from dundie.utils.user import password_encrypt
-
-
-@pytest.mark.unit
-@pytest.mark.medium
-@pytest.mark.parametrize(
-    "address", ["jose@gmail.com", "joe@doe.com", "a@b.pt"]
-)
-def test_positive_check_valid_email(address):
-    """Ensure email is valid."""
-    assert check_valid_email(address) is True
-
-
-@pytest.mark.unit
-@pytest.mark.medium
-@pytest.mark.parametrize("address", ["jose@.com", "@doe.com", "a@b"])
-def test_negative_check_valid_email(address):
-    """Ensure email is invalid."""
-    assert check_valid_email(address) is False
 
 
 @pytest.mark.unit

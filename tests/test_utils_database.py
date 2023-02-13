@@ -4,13 +4,6 @@ from dundie.database import get_session
 from dundie.models import InvalidEmailError, Person
 from dundie.utils.db import add_movement, add_person
 
-# @pytest.mark.unit
-# @pytest.mark.high
-# def test_database_schema():
-#    db = connect()
-#    assert db.keys() == EMPTY_DB.keys()
-#
-
 
 @pytest.mark.unit
 def test_commit_to_database():

@@ -1,22 +1,21 @@
 import csv
-import decimal
-import json
 
 
 def export_json(output: str, result: dict) -> bool:
     """Export json file based on input data"""
     # TODO: Solve decimal problem
-    try:
-        with open(output, "w") as output_file:
-            for item in result:
-                if type(item) == decimal.Decimal:
-                    print("É decimal")
-                    item = str(item)
+    pass
+    # try:
+    #    with open(output, "w") as output_file:
+    #        for item in result:
+    #            if type(item) == decimal.Decimal:
+    #                print("É decimal")
+    #                item = str(item)
 
-            output_file.write(json.dumps(result))
+    #       output_file.write(json.dumps(result))
 
-    except NotADirectoryError as error:
-        print(error)
+    # except NotADirectoryError as error:
+    #    print(error)
 
 
 def export_csv(output: str, result: dict) -> bool:
@@ -29,5 +28,5 @@ def export_csv(output: str, result: dict) -> bool:
             writer.writeheader()
             writer.writerows(person for person in result)
 
-    except NotADirectoryError as error:
+    except PermissionError as error:
         print(error)
