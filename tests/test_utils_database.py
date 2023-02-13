@@ -4,13 +4,6 @@ from dundie.database import get_session
 from dundie.models import InvalidEmailError, Person
 from dundie.utils.db import add_movement, add_person
 
-# @pytest.mark.unit
-# @pytest.mark.high
-# def test_database_schema():
-#    db = connect()
-#    assert db.keys() == EMPTY_DB.keys()
-#
-
 
 @pytest.mark.unit
 def test_commit_to_database():
@@ -70,7 +63,7 @@ def test_add_person_for_the_first_time():
 @pytest.mark.unit
 def test_negative_add_person_invalid_email():
     with pytest.raises(InvalidEmailError):
-        with get_session() as session:
+        with get_session() as _:
             data = {
                 "email": "joe@",
                 "name": "Joe Doe",
@@ -78,9 +71,7 @@ def test_negative_add_person_invalid_email():
                 "role": "Salesman",
             }
 
-            instance = Person(**data)
-
-            add_person(session, instance)
+            Person(**data)
 
 
 @pytest.mark.unit
@@ -110,3 +101,25 @@ def test_add_or_remove_points_for_person():
         assert after == before - 100
         assert before == 500
         assert after == 400
+
+
+@pytest.mark.unit
+def test_add_person_existing_person():
+    with get_session() as session:
+        data = {
+            "email": "joe@doe.com",
+            "name": "Joe Doe",
+            "dept": "Sales",
+            "role": "Salesman",
+        }
+
+        instance = Person(**data)
+
+        _, created = add_person(session, instance)
+        assert created is True
+
+        session.commit()
+
+        _, new_created = add_person(session, instance)
+
+        assert new_created is False

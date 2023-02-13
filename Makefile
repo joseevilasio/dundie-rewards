@@ -11,6 +11,9 @@ virtualenv:
 test:
 	@.venv/bin/pytest -s --forked
 
+code-coverage:
+	@.venv/bin/pytest --cov-report html --cov . 
+
 watch:
 	# @.venv/bin/ptw
 	@ls **/*.py | entr pytest --forked

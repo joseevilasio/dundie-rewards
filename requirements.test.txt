@@ -5,3 +5,4 @@ pyproject-flake8
 black
 isort
 pytest-forked
+pytest-cov
