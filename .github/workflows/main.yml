@@ -24,15 +24,16 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
-          python-version: ${{matrix.python-version}}      
+          python-version: ${{matrix.python-version}} 
+      - before_install: pip install poetry
       - name: Install Project 
-        run: pip install '.[test]'
+        run: poetry install
       - name: Look for style errors
-        run: pflake8
+        run: poetry run pflake8
       - name: Check for in importing style
-        run: isort --profile=black  dundie tests integration    
+        run: poetry run isort --profile=black  dundie tests integration    
       - name: Look for auto format errors
-        run: black --check --diff dundie tests integration
+        run: poetry run black --check --diff dundie tests integration
 
   tests:
     needs: lint
@@ -47,10 +48,11 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: ${{matrix.python-version}}
+      - before_install: pip install poetry
       - name: Install Project 
-        run: pip install '.[test]'
+        run: poetry install
       - name: Run tests         
-        run: pytest -v --forked --junitxml=test-result.xml
+        run: poetry run pytest -v --forked --junitxml=test-result.xml
       - name: publish junit results
         uses: EnricoMi/publish-unit-test-result-action@v1
         if: always()

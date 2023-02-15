@@ -40,7 +40,7 @@ name = "dundie"
 version = "0.1.0"
 description = "Reward Point System for Dunder Mifflin"
 authors = ["Jose Junior"]
-readme = "README.md"
+readme = ["README.md", "LICENSE"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
