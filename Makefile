@@ -1,18 +1,14 @@
 # Makefile
-.PHONY: install virtualenv ipython clean test pflake8 fmt lint watch docs docs-serve build
+.PHONY: install ipython clean test pflake8 fmt lint watch docs docs-serve build
 
 install:
-	@echo "Installing for dev environment"
-	@.venv/bin/python -m pip install -e '.[test,dev]'
-
-virtualenv:
-	@.venv/bin/python -m pip -m venv .venv
+	@poetry install
 
 test:
 	@.venv/bin/pytest -s --forked
 
 code-coverage:
-	@.venv/bin/pytest --cov-report html --cov . 
+	@poetry run pytest --cov-report html --cov . 
 
 watch:
 	# @.venv/bin/ptw
