@@ -32,7 +32,7 @@ jobs:
           python-version: ${{matrix.python-version}} 
 
       - name: Install Poetry
-        uses: Gr1N/setup-poetry@v4
+        uses: snok/install-poetry@v1
 
       - name: Install Project 
         run: poetry install
@@ -66,7 +66,7 @@ jobs:
           python-version: ${{matrix.python-version}}
 
       - name: Install Poetry
-        uses: Gr1N/setup-poetry@v4
+        uses: snok/install-poetry@v1
 
       - name: Install Project 
         run: poetry install
