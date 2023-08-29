@@ -53,3 +53,11 @@ build:
 
 publish:
 	@poetry publish
+
+coverage-report:
+	@poetry run coverage report
+
+citest:
+	@poetry run py.test -v --cov-config .coveragerc --cov=dundie -l tests/ --junitxml=junit/test-results.xml
+	@poetry run coverage xml
+	make coverage-report

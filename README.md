@@ -1,5 +1,6 @@
 # Projeto Dundie Rewards
 [![CI](https://github.com/joseevilasio/dundie-rewards/actions/workflows/main.yml/badge.svg)](https://github.com/joseevilasio/dundie-rewards/actions/workflows/main.yml)
+[![codecov](https://codecov.io/gh/joseevilasio/dundie-rewards/graph/badge.svg?token=IC9O6T5831)](https://codecov.io/gh/joseevilasio/dundie-rewards)
 
 Projeto sendo realizado relacionado ao curso Python Experts LinuxTips, em andamento.
 
