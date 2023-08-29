@@ -73,10 +73,8 @@ jobs:
 
       - name: Run tests         
         run: poetry run pytest -v --forked --junitxml=test-result.xml
-      - name: Run tests for cov
-        run: poetry run pytest -v --cov-config .coveragerc --cov=dundie -l tests/ --junitxml=junit/test-results.xml
-      - name: Run tests for cov file name
-	      run: poetry run coverage xml
+      - name: Run tests CI cov
+        run: make citest
 
       - name: publish junit results
         uses: EnricoMi/publish-unit-test-result-action@v1
