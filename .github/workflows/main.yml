@@ -82,7 +82,7 @@ jobs:
           check_name: Test Result (Python ${{matrix.python-version}})
 
       - name: "Upload coverage to Codecov"
-        if: ${{ matrix.python-version == '3.8' }}
+        if: ${{ matrix.python-version == '3.9' }}
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
